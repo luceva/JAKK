@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',     filename='css/home.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+</head>
+<body class="homepage">
+  <div class="wrapper">
+    <!-- <div class="header">
+      {{ self.title() }}
+    </div> -->
+    <div class="menu-header">
+      <img src="static/resources/ama_logo.png" width="100" height="100"> 
+    </div>
+    <div class="menu">
+      {% set navigation_bar = [
+        ('main.major', 'Major report'),
+        ('main.salaryvsdept', 'Salary Vs Debt report'),
+        ('main.compare', 'Compare report'),
+        ('main.minor', 'Minor report'),
+        ('main.gender', 'Gender report')] -%}
+
+      {% set active_page = active_page|default('major') -%}
+      
+      <ul id="navigation" class="menu-items">
+        {% for id, caption in navigation_bar %}
+        <li{% if id == active_page %} class="active"{% endif%}>
+          <a href="{{ url_for(id) }}">{{ caption }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+
+    </div>
+    <div class="content">
+      <script type=text/javascript src="{{url_for('static', filename='scripts/Chart.min.js') }}"></script>
+      <script type=text/javascript src="{{url_for('static', filename='scripts/jQuery.min.js') }}"></script>
+      {% block content%}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

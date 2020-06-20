@@ -1,0 +1,50 @@
+{% extends "home.html" %}
+{% set active_page = "gender" %}
+{% block title %}Gender{% endblock %}
+{% block content %}  
+  <div class="title"> Gender Report </div>
+  <div class="results">
+    <div class="stat card">
+      <div class="title">
+          Salaries by gender
+      </div>
+      <div class="content">
+        <div class="title-text">
+          Males:
+        </div>
+        <div class="value-text">
+          ${{ averageM }}
+        </div>
+      </div>
+      <div class="content">
+        <div class="title-text">
+          Females:
+        </div>
+        <div class="value-text">
+          ${{ averageF }}
+        </div>
+      </div>
+    </div>
+    <div class="graph card">
+      <div class="graph title">
+          Gender distribution
+      </div>
+      <canvas id="chart" width="500" height="350"></canvas>
+      <script type="text/javascript">
+        var pieData = [
+          {% for item, label, colors in set %}
+            {
+              value: {{item}},
+              label: "{{label}}",
+              color : "{{colors}}"
+            },
+          {% endfor %}
+        ];
+        var mychart = document.getElementById("chart").getContext("2d");
+        steps = 10
+        max = 10000
+        new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
+      </script>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "home.html" %}
+{% set active_page = "compare" %}
+{% block title %}Compare{% endblock %}
+{% block content %}  
+  <div class="title"> Compare Report </div>
+    <div class="form card">
+    <form method="post">
+      <label>Pick the First Major:</label>
+      <select name="majorF">
+        {% for majorF in major_rows %}
+          <option value="{{ majorF }}">{{ majorF }}</option>
+        {% endfor %}
+      </select>
+      <br><label>Pick the Second Major:</label>
+      <select name="majorS">
+        {% for majorS in major_rows %}
+          <option value="{{ majorS }}">{{ majorS }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" name="Submit" value="Submit">
+    </form>
+  </div>
+  {% if majorF and majorS %}
+  <div class="stat card">
+    <div class="title">
+     {{ majorF }} vs {{ majorS }}
+    </div>
+  </div>
+  <div class="graph card">
+    <div class="graph title">
+        Salaries
+    </div>
+    <canvas id="chart" width="500" height="350"></canvas>
+    <script type="text/javascript">
+      var barData = {
+        labels : [
+          {% for item in majors %}
+          "{{ item }}",
+          {% endfor %}
+  ],
+        datasets : [{
+          fillColor: "#b8e44e",
+          strokeColor: "#546b00",
+          pointColor: "#000000",
+          data : [
+            {% for item in averages %}
+              "{{ item }}",
+              {% endfor %}
+      ]
+          }
+        ]
+      }
+    var mychart = document.getElementById("chart").getContext("2d");
+      steps = 20
+      max = 100
+    new Chart(mychart).Bar(barData, {
+      scaleOverride: true,
+      scaleSteps: steps,
+      scaleStepWidth: Math.ceil(max / steps),
+      scaleStartValue: 0,
+      scaleShowVerticalLines: true,
+      scaleShowGridLines : true,
+      barShowStroke : true,
+      scaleShowLabels: true
+      }
+    );
+    </script>
+  </div>
+  {% endif %}
+{% endblock %}

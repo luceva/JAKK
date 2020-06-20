@@ -1,0 +1,97 @@
+{% extends "home.html" %}
+{% set active_page = "main.major" %}
+{% block title %}Major report{% endblock %}
+{% block content %}
+  {{ super() }}
+  <div class="title"> Major Report </div>
+    <div class="form card">
+    <form method="post">
+      <label>Pick a Major:</label>
+      <select name="major">
+        {% for major in major_rows %}
+          <option value="{{ major }}">{{ major }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" name="Submit" value="Submit">
+    </form>
+  </div>
+  {% if major %}
+  <div class="results">
+    <div class="stat card">
+      <div class="title">
+          {{ major }}
+      </div>
+      <div class="content">
+        <div class="title-text">
+          Retention Rate:
+        </div>
+        <div class="value-text">
+          {{ retention }}
+        </div>
+      </div>
+      
+    </div>
+    <div class="graph card">
+      <div class="graph title">
+          Salaries vs Graduation year
+      </div>
+      <canvas id="chart" width="1000" height="350"></canvas>
+      <script type="text/javascript">
+        var barData = {
+          labels : [
+            {% for item in major_gradyear %}
+              "{{ item }}",
+            {% endfor %}
+          ],
+          datasets : [{
+            fillColor: "#546b00",
+            pointColor: "#000000",
+            pointStrokeColor: "#000000",
+            pointHighlightFill: "#fff",
+            bezierCurve : false,
+            data : [
+          {% for item  in major_salary %}
+                {{ item  }},
+              {% endfor %}]
+            },
+            {
+            fillColor: 'rgba(184, 228, 78, 0.6)',
+            pointColor: "#000000",
+            pointStrokeColor: "#000000",
+            pointHighlightFill: "#fff",
+            bezierCurve : false,
+            data : [
+          {% for item  in major_loans %}
+                {{ item  }},
+              {% endfor %}]
+            }
+      ]
+        }
+        Chart.defaults.global.animationSteps = 50;
+        Chart.defaults.global.tooltipYPadding = 16;
+        Chart.defaults.global.tooltipCornerRadius = 0;
+        Chart.defaults.global.tooltipTitleFontStyle = "normal";
+        Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+        Chart.defaults.global.animationEasing = "easeOutBounce";
+        Chart.defaults.global.responsive = false;
+        Chart.defaults.global.scaleLineColor = "black";
+        Chart.defaults.global.scaleFontSize = 16;
+        var mychart = document.getElementById("chart").getContext("2d");
+        steps = 20
+        max = 100
+        var LineChartDemo = new Chart(mychart).Line(barData, {
+          scaleOverride: true,
+          scaleSteps: steps,
+          scaleStepWidth: Math.ceil(max / steps),
+          scaleStartValue: 0,
+          scaleShowVerticalLines: true,
+          scaleShowGridLines : true,
+          barShowStroke : true,
+          scaleShowLabels: true,
+          bezierCurve: false,
+        });
+      </script>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

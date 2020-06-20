@@ -1,0 +1,64 @@
+{% extends "home.html" %}
+{% set active_page = "Salary Vs Debt" %}
+{% block title %}Salary Vs Debt{% endblock %}
+{% block content %}  
+  <div class="title"> Salary Vs Debt Report</div>
+    <div class="form card">
+    <form method="post">
+      <label>Pick a Major:</label>
+      <select name="major">
+        {% for major in major_rows %}
+          <option value="{{ major }}">{{ major }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" name="Submit" value="Submit">
+    </form>
+  </div>
+  {% if major %}
+  <div class="stat card">
+    <div class="title">
+     {{ major }}
+    </div>
+  </div>
+  <div class="graph card">
+    <div class="graph title">
+        Salary Vs Loan Debt
+    </div>
+    <canvas id="chart" width="500" height="350"></canvas>
+    <script type="text/javascript">
+      var barData = {
+        labels : [
+          {% for item in majors %}
+          "{{ item }}",
+          {% endfor %}
+  ],
+        datasets : [{
+          fillColor: "#b8e44e",
+          strokeColor: "#546b00",
+          pointColor: "#000000",
+          data : [
+            {% for item in averages %}
+              "{{ item }}",
+              {% endfor %}
+      ]
+          }
+        ]
+      }
+    var mychart = document.getElementById("chart").getContext("2d");
+      steps = 20
+      max = 100
+    new Chart(mychart).Bar(barData, {
+      scaleOverride: true,
+      scaleSteps: steps,
+      scaleStepWidth: Math.ceil(max / steps),
+      scaleStartValue: 0,
+      scaleShowVerticalLines: true,
+      scaleShowGridLines : true,
+      barShowStroke : true,
+      scaleShowLabels: true
+      }
+    );
+    </script>
+  </div>
+  {% endif %}
+{% endblock %}
